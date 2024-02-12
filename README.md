@@ -1,6 +1,6 @@
 # gas_master
 
-A new Flutter project.
+A new app for gas leakage detection and mitigation as a part of a mini project.
 
 ## Getting Started
 
