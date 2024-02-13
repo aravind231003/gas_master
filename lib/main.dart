@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -42,48 +48,59 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: const Color.fromARGB(255, 241, 20, 5),
           title: Text('Gas Master'),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              
-              ConstrainedBox(
-                constraints: BoxConstraints.tightFor(height: 50, width: 300),
-                child: ElevatedButton.icon(
-                    icon: Icon(Icons.fire_extinguisher),
-                    onPressed: null,
-                    label: Text('Button'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                      elevation: 25,
-                    )),
+        body: Stack(
+          children: [
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 150,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    ConstrainedBox(
+                      constraints:
+                          BoxConstraints.tightFor(height: 50, width: 300),
+                      child: ElevatedButton.icon(
+                          icon: Icon(Icons.fire_extinguisher),
+                          onPressed: null,
+                          label: Text('Button'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            elevation: 25,
+                          )),
+                    ),
+                    SizedBox(height: 25),
+                    ConstrainedBox(
+                      constraints:
+                          BoxConstraints.tightFor(height: 50, width: 300),
+                      child: ElevatedButton.icon(
+                          icon: Icon(Icons.fire_extinguisher),
+                          onPressed: null,
+                          label: Text('Button'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            elevation: 25,
+                          )),
+                    ),
+                    SizedBox(height: 25),
+                    ConstrainedBox(
+                      constraints:
+                          BoxConstraints.tightFor(height: 50, width: 300),
+                      child: ElevatedButton.icon(
+                          icon: Icon(Icons.fire_extinguisher),
+                          onPressed: null,
+                          label: Text('Button'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            elevation: 25,
+                          )),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 10),
-              ConstrainedBox(
-                constraints: BoxConstraints.tightFor(height: 50, width: 300),
-                child: ElevatedButton.icon(
-                    icon: Icon(Icons.fire_extinguisher),
-                    onPressed: null,
-                    label: Text('Button'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      elevation: 25,
-                    )),
-              ),
-              SizedBox(height: 10),
-              ConstrainedBox(
-                constraints: BoxConstraints.tightFor(height: 50, width: 300),
-                child: ElevatedButton.icon(
-                    icon: Icon(Icons.fire_extinguisher),
-                    onPressed: null,
-                    label: Text('Button'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                      elevation: 25,
-                    )),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
 
         floatingActionButton: const FloatingActionButton(

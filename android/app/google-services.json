@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "495117466135",
+    "project_id": "gas-master",
+    "storage_bucket": "gas-master.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495117466135:android:f17ff9f91a7bf9852aba52",
+        "android_client_info": {
+          "package_name": "com.example.gas_master"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqBfE2Yfb37d1qFAPTGrB8n2kWuwm3AsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
