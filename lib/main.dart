@@ -55,49 +55,42 @@ class _MyHomePageState extends State<MyHomePage> {
             Positioned(
               left: 0,
               right: 0,
-              bottom: 150,
+              bottom: 100,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    ConstrainedBox(
-                      constraints:
-                          BoxConstraints.tightFor(height: 50, width: 300),
-                      child: ElevatedButton.icon(
-                          icon: Icon(Icons.fire_extinguisher),
-                          onPressed: null,
-                          label: Text('Button'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            elevation: 25,
-                          )),
-                    ),
+                  children: [
+                    ElevatedButton.icon(
+                        icon: Icon(Icons.fire_extinguisher),
+                        onPressed: null,
+                        label: Text('Button'),
+                        style: ButtonStyle(
+                            elevation: MaterialStatePropertyAll(25),
+                            fixedSize: MaterialStatePropertyAll(Size(300, 50)),
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.redAccent))),
                     SizedBox(height: 25),
-                    ConstrainedBox(
-                      constraints:
-                          BoxConstraints.tightFor(height: 50, width: 300),
-                      child: ElevatedButton.icon(
-                          icon: Icon(Icons.fire_extinguisher),
-                          onPressed: null,
-                          label: Text('Button'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            elevation: 25,
-                          )),
-                    ),
+                    ElevatedButton.icon(
+                        icon: Icon(Icons.fire_extinguisher),
+                        onPressed: null,
+                        label: Text('Button'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.redAccent),
+                          elevation: MaterialStatePropertyAll(25),
+                          fixedSize: MaterialStatePropertyAll(Size(300, 50)),
+                        )),
                     SizedBox(height: 25),
-                    ConstrainedBox(
-                      constraints:
-                          BoxConstraints.tightFor(height: 50, width: 300),
-                      child: ElevatedButton.icon(
-                          icon: Icon(Icons.fire_extinguisher),
-                          onPressed: null,
-                          label: Text('Button'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            elevation: 25,
-                          )),
-                    ),
+                    ElevatedButton.icon(
+                        icon: Icon(Icons.fire_extinguisher),
+                        onPressed: null,
+                        label: Text('Button'),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.redAccent),
+                          elevation: MaterialStatePropertyAll(25),
+                          fixedSize: MaterialStatePropertyAll(Size(300, 50)),
+                        )),
                   ],
                 ),
               ),
