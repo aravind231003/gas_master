@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gas_master/api/frebaseapi.dart';
+import 'animation.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -52,6 +53,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Stack(
           children: [
+            Positioned(
+                left: 0,
+                right: 0,
+                top: 100,
+                child: GasCylinderIndicator(gasLevel: .75)),
             Positioned(
               left: 0,
               right: 0,
