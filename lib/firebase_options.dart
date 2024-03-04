@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '495117466135',
     projectId: 'gas-master',
     authDomain: 'gas-master.firebaseapp.com',
+    databaseURL: 'https://gas-master-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'gas-master.appspot.com',
     measurementId: 'G-033DNLL53R',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:495117466135:android:f17ff9f91a7bf9852aba52',
     messagingSenderId: '495117466135',
     projectId: 'gas-master',
+    databaseURL: 'https://gas-master-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'gas-master.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:495117466135:ios:152b6a9bf626a1972aba52',
     messagingSenderId: '495117466135',
     projectId: 'gas-master',
+    databaseURL: 'https://gas-master-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'gas-master.appspot.com',
     iosBundleId: 'com.example.gasMaster',
   );
@@ -75,6 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:495117466135:ios:793d62a37ec5d3382aba52',
     messagingSenderId: '495117466135',
     projectId: 'gas-master',
+    databaseURL: 'https://gas-master-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'gas-master.appspot.com',
     iosBundleId: 'com.example.gasMaster.RunnerTests',
   );

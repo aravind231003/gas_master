@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gas_master/api/frebaseapi.dart';
-import 'animation.dart';
+import 'package:gas_master/gas%20level.dart';
+import 'package:gas_master/homescreen.dart';
 import 'firebase_options.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,8 +38,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Widget> tabWidget = [Homescreen(), Gaslevel()];
+  int indexNum = 0;
   @override
   Widget build(BuildContext context) {
+    //Color color = _getColorForGasLevel(_gasLevel);
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
@@ -51,65 +56,43 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: const Color.fromARGB(255, 241, 20, 5),
           title: Text('Gas Master'),
         ),
-        body: Stack(
-          children: [
-            Positioned(
-                left: 0,
-                right: 0,
-                top: 100,
-                child: GasCylinderIndicator(gasLevel: .75)),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 100,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton.icon(
-                        icon: Icon(Icons.fire_extinguisher),
-                        onPressed: null,
-                        label: Text('Button'),
-                        style: ButtonStyle(
-                            elevation: MaterialStatePropertyAll(25),
-                            fixedSize: MaterialStatePropertyAll(Size(300, 50)),
-                            backgroundColor:
-                                MaterialStatePropertyAll(Colors.redAccent))),
-                    SizedBox(height: 25),
-                    ElevatedButton.icon(
-                        icon: Icon(Icons.fire_extinguisher),
-                        onPressed: null,
-                        label: Text('Button'),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.redAccent),
-                          elevation: MaterialStatePropertyAll(25),
-                          fixedSize: MaterialStatePropertyAll(Size(300, 50)),
-                        )),
-                    SizedBox(height: 25),
-                    ElevatedButton.icon(
-                        icon: Icon(Icons.fire_extinguisher),
-                        onPressed: null,
-                        label: Text('Button'),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.redAccent),
-                          elevation: MaterialStatePropertyAll(25),
-                          fixedSize: MaterialStatePropertyAll(Size(300, 50)),
-                        )),
-                  ],
-                ),
-              ),
+        body: tabWidget.elementAt(indexNum),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.red,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "Home",
+              backgroundColor: Colors.blue,
             ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.gas_meter),
+              label: "Gas Level",
+              backgroundColor: Colors.red,
+            )
           ],
+          currentIndex: indexNum,
+          onTap: (int index) => setState(() {
+            indexNum = index;
+          }),
         ),
-
-        floatingActionButton: const FloatingActionButton(
-          onPressed: null,
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
   }
 }
+
+void listenForUpdates() {
+  DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
+  databaseReference.onValue.listen((DatabaseEvent event) {
+    print('Data: ${event.snapshot.value}');
+  });
+}
+//Color _getColorForGasLevel(double gasLevel) {
+ // if (gasLevel <= 0.2) {
+   // return Colors.red;
+  //} else if (gasLevel > 0.2 && gasLevel <= 0.7) {
+    //return Colors.orange;
+  //} else {
+    //return Colors.green;
+  //}
+//}
