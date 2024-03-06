@@ -10,19 +10,21 @@ class Gaslevel extends StatefulWidget {
 }
 
 class _GaslevelState extends State<Gaslevel> {
-  String realtimevalue = '1';
-  var _gasLevel = 100;
+  String realtimevalue = '0';
+  var _gasLevel;
   @override
   Widget build(BuildContext context) {
-    DatabaseReference databaseReference = FirebaseDatabase.instance
-        .ref('UsersData/KbSkscgNamhf99vjwlhRzjOhvjc2/readings/1709544889')
-        .child('output1');
+    DatabaseReference databaseReference =
+        FirebaseDatabase.instance.ref('Flame/output1');
     databaseReference.onValue.listen((DatabaseEvent event) {
       setState(() {
         realtimevalue = event.snapshot.value.toString();
       });
     });
-
+    DatabaseReference gas = FirebaseDatabase.instance.ref('gas level/output');
+    gas.onValue.listen((DatabaseEvent event) {
+      _gasLevel = int.parse(event.snapshot.value.toString());
+    });
     return Column(
       children: [
         SizedBox(
