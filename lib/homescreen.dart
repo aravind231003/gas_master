@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:slidable_button/slidable_button.dart';
+import 'package:gas_master/togglebutton1.dart';
+import 'package:gas_master/togglebutton2.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -18,7 +20,7 @@ class _HomescreenState extends State<Homescreen> {
         SizedBox(height: 50),
         Center(
           child: Image.asset(
-            'images/fire.png',
+            'images/fire-flame.gif',
             width: 200,
             height: 200,
           ),
@@ -37,66 +39,21 @@ class _HomescreenState extends State<Homescreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(height: 25),
-              HorizontalSlidableButton(
-                width: MediaQuery.of(context).size.width / 1.5,
-                height: MediaQuery.of(context).size.height / 15,
-                buttonWidth: 70.0,
-                autoSlide: false,
-                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                buttonColor: Theme.of(context).primaryColor,
-                dismissible: false,
-                initialPosition: SlidableButtonPosition.start,
-                label: Center(child: Text('MOTOR')),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('OFF'),
-                      Text('ON'),
-                    ],
-                  ),
-                ),
-                onChanged: (position) {
-                  if (position == SlidableButtonPosition.start) {
-                    sendDataToFirebase(0, 'Servo', 'motor');
-                  }
-                  if (position == SlidableButtonPosition.end) {
-                    sendDataToFirebase(1, 'Servo', 'motor');
-                  }
-                },
-              ),
               SizedBox(height: 25),
-              HorizontalSlidableButton(
-                width: MediaQuery.of(context).size.width / 1.5,
-                height: MediaQuery.of(context).size.height / 15,
-                buttonWidth: 70.0,
-                autoSlide: false,
-                color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                buttonColor: Theme.of(context).primaryColor,
-                dismissible: false,
-                initialPosition: SlidableButtonPosition.start,
-                label: Center(child: Text('FAN')),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('OFF'),
-                      Text('ON'),
-                    ],
-                  ),
+              FirebaseToggleButton1(),
+              SizedBox(height: 25),
+              FirebaseToggleButton2(),
+              SizedBox(height: 25),
+              ElevatedButton(
+                style: ButtonStyle(
+                  elevation: MaterialStatePropertyAll(25),
+                  fixedSize: MaterialStatePropertyAll(Size(250, 50)),
                 ),
-                onChanged: (position) {
-                  if (position == SlidableButtonPosition.start) {
-                    sendDataToFirebase(0, 'Fan', 'fan');
-                  }
-                  if (position == SlidableButtonPosition.end) {
-                    sendDataToFirebase(1, 'Fan', 'fan');
-                  }
+                onPressed: () {
+                  _launchDialer('101');
                 },
-              ),
-              SizedBox(height: 50),
+                child: Text('FIRE STATION'),
+              )
             ],
           ),
         ),
@@ -105,16 +62,25 @@ class _HomescreenState extends State<Homescreen> {
   }
 }
 
-sendDataToFirebase(int data, var node, var sensor) {
+sendDataToFirebase(bool data, var node, var sensor) {
   DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
 
   // Assuming 'sensorData' is the node where data will be stored
   databaseReference.child('$node').set({
     '$sensor': data,
     // Add more data fields as needed
-  }).then((value) {
-    print('Data sent successfully');
-  }).catchError((error) {
-    print('Failed to send data: $error');
+  });
+}
+
+void _launchDialer(String phoneNumber) async {
+  Uri url = Uri(scheme: 'tel', path: phoneNumber);
+  await launchUrl(url);
+}
+
+getdata(String path) {
+  DatabaseReference database = FirebaseDatabase.instance.ref('$path');
+  database.onValue.listen((DatabaseEvent event) {
+    final data = event.snapshot.value;
+    print(data);
   });
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_master/animation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Gaslevel extends StatefulWidget {
   const Gaslevel({super.key});
@@ -10,8 +11,8 @@ class Gaslevel extends StatefulWidget {
 }
 
 class _GaslevelState extends State<Gaslevel> {
-  String realtimevalue = '0';
   var _gasLevel;
+  String realtimevalue = '0';
   @override
   Widget build(BuildContext context) {
     DatabaseReference databaseReference =
@@ -45,14 +46,39 @@ class _GaslevelState extends State<Gaslevel> {
         SizedBox(
           height: 30,
         ),
-        Text(
-          'flame sensor value:$realtimevalue',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+        ElevatedButton(
+          style: ButtonStyle(
+            elevation: MaterialStatePropertyAll(25),
+            fixedSize: MaterialStatePropertyAll(Size(250, 50)),
           ),
-        ),
+          onPressed: () {
+            _launchDialer('+91 9447869164');
+          },
+          child: Text('BOOK YOUR GAS'),
+        )
+        //Text(
+        //'flame sensor value:$realtimevalue',
+        //style: TextStyle(
+        //fontWeight: FontWeight.bold,
+        //fontSize: 20,
+        //),
+        //),
       ],
     );
   }
+}
+
+void _launchDialer(String phoneNumber) async {
+  Uri url = Uri(scheme: 'tel', path: phoneNumber);
+  await launchUrl(url);
+}
+
+getflame() {
+  String realtimevalue = '0';
+  DatabaseReference databaseReference =
+      FirebaseDatabase.instance.ref('Flame/output1');
+  databaseReference.onValue.listen((DatabaseEvent event) {
+    realtimevalue = event.snapshot.value.toString();
+  });
+  return realtimevalue;
 }
