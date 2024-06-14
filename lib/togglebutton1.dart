@@ -1,46 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:gas_master/homescreen.dart';
+import 'package:gas_master/api/frebaseapi.dart';
 
-class FirebaseToggleButton1 extends StatefulWidget {
+class FirebaseToggleButton extends StatefulWidget {
+  final String datapath;
+  final String node;
+  final String sensor;
+  final String onText;
+  final String offText;
+  FirebaseToggleButton({
+    required this.datapath,
+    required this.node,
+    required this.sensor,
+    required this.onText,
+    required this.offText,
+  });
   @override
   _FirebaseToggleButtonState createState() => _FirebaseToggleButtonState();
 }
 
-class _FirebaseToggleButtonState extends State<FirebaseToggleButton1> {
-  late bool isToggled;
-
+class _FirebaseToggleButtonState extends State<FirebaseToggleButton> {
+  late DatabaseReference database;
+  bool isToggled = false;
   @override
   void initState() {
     super.initState();
-
-    // Set up Firebase listener to retrieve initial button state
-    DatabaseReference database = FirebaseDatabase.instance.ref();
-
+    database = FirebaseDatabase.instance.ref();
     // Set up Firebase listener to listen for changes in button state
-    database.child('Fan/fan').onValue.listen((DatabaseEvent event) {
-      setState(() {
-        // Update button state based on data received from Firebase
-        var data = event.snapshot.value.toString();
-        isToggled =
-            String.fromEnvironment(event.snapshot.value.toString()) == 'true'
-                ? true
-                : false;
-        print(isToggled); // Default to false if data is null
-        print(data);
-      });
+    database.child(widget.datapath).onValue.listen((DatabaseEvent event) {
+      if (mounted) {
+        setState(() {
+          // Update button state based on data received from Firebase
+          isToggled = bool.parse(event.snapshot.value.toString());
+        });
+      }
     });
   }
 
   void onPressedFunction() {
     // Function to execute when button is toggled ON
-    sendDataToFirebase(true, 'Fan', 'fan');
+    Firebaseapi().sendDataToFirebase(true, widget.node, widget.sensor);
     // Perform action for ON state
   }
 
   void onUnpressedFunction() {
     // Function to execute when button is toggled OFF
-    sendDataToFirebase(false, 'Fan', 'fan');
+    Firebaseapi().sendDataToFirebase(false, widget.node, widget.sensor);
     // Perform action for OFF state
   }
 
@@ -48,8 +53,8 @@ class _FirebaseToggleButtonState extends State<FirebaseToggleButton1> {
     // Update button state in Firebase when button is pressed
     DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
     databaseReference
-        .child('Fan/fan')
-        .set(isToggled); // Toggle the current state
+        .child(widget.datapath)
+        .set(!isToggled); // Toggle the current state
   }
 
   @override
@@ -73,7 +78,7 @@ class _FirebaseToggleButtonState extends State<FirebaseToggleButton1> {
           onUnpressedFunction();
         }
       },
-      child: Text(isToggled ? 'Fan on' : 'Fan off'),
+      child: Text(isToggled ? widget.onText : widget.offText),
     );
   }
 }

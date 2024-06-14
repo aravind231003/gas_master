@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class GaslevelPainter extends CustomPainter {
-  final int gaslevel;
+  final double gaslevel;
 
   GaslevelPainter(this.gaslevel);
 

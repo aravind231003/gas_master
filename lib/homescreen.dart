@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:gas_master/togglebutton1.dart';
-import 'package:gas_master/togglebutton2.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Homescreen extends StatefulWidget {
@@ -13,11 +12,50 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   int button = 0;
+  int flame = 1;
+  int digitalgas = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    DatabaseReference gas = FirebaseDatabase.instance.ref('Gas/output');
+    gas.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        digitalgas = int.parse(event.snapshot.value.toString());
+
+        if (digitalgas == 0) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => Dialogbox(
+                    title: 'WARNING !!!!',
+                    content:
+                        'Please Check your gas leakge before turning on the regulator',
+                  ));
+        }
+      });
+    });
+    DatabaseReference databaseReference =
+        FirebaseDatabase.instance.ref('Flame/output1');
+    databaseReference.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        flame = int.parse(event.snapshot.value.toString());
+        if (flame == 0) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) => Dialogbox(
+                    title: 'EMERGENCY ALERT !!!!',
+                    content: 'FIRE HAS BEEN DETECTED',
+                  ));
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 50),
+        SizedBox(height: 30),
         Center(
           child: Image.asset(
             'images/fire-flame.gif',
@@ -25,7 +63,7 @@ class _HomescreenState extends State<Homescreen> {
             height: 200,
           ),
         ),
-        SizedBox(height: 50),
+        SizedBox(height: 30),
         Text(
           'Gas Master',
           style: TextStyle(
@@ -33,16 +71,35 @@ class _HomescreenState extends State<Homescreen> {
             fontSize: 20,
           ),
         ),
-        SizedBox(height: 50),
+        SizedBox(height: 30),
+        Text(
+          digitalgas == 0 ? 'GAS LEAKAGE DETECTED' : '',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        SizedBox(height: 70),
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(height: 25),
+              FirebaseToggleButton(
+                datapath: 'Fan/fan',
+                node: 'Fan',
+                sensor: 'fan',
+                onText: 'Fan ON',
+                offText: 'fan OFF',
+              ),
               SizedBox(height: 25),
-              FirebaseToggleButton1(),
-              SizedBox(height: 25),
-              FirebaseToggleButton2(),
+              FirebaseToggleButton(
+                datapath: 'Servo/motor',
+                node: 'Servo',
+                sensor: 'motor',
+                onText: 'REGULATOR ON',
+                offText: 'REGULATOR OFF',
+              ),
               SizedBox(height: 25),
               ElevatedButton(
                 style: ButtonStyle(
@@ -53,23 +110,13 @@ class _HomescreenState extends State<Homescreen> {
                   _launchDialer('101');
                 },
                 child: Text('FIRE STATION'),
-              )
+              ),
             ],
           ),
         ),
       ],
     );
   }
-}
-
-sendDataToFirebase(bool data, var node, var sensor) {
-  DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
-
-  // Assuming 'sensorData' is the node where data will be stored
-  databaseReference.child('$node').set({
-    '$sensor': data,
-    // Add more data fields as needed
-  });
 }
 
 void _launchDialer(String phoneNumber) async {
@@ -83,4 +130,28 @@ getdata(String path) {
     final data = event.snapshot.value;
     print(data);
   });
+}
+
+class Dialogbox extends StatelessWidget {
+  final String title, content;
+
+  Dialogbox({super.key, required this.title, required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'OK'),
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  }
 }
